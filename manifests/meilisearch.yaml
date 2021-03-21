@@ -90,8 +90,8 @@ spec:
             httpGet:
               path: /health
               port: http
-            periodSeconds: 60
-            initialDelaySeconds: 60
+            periodSeconds: 30
+            initialDelaySeconds: 30
           resources:
             {}
 ---
