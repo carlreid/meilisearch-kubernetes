@@ -5,8 +5,8 @@
 replicaCount: 1
 
 readinessProbe:
-  periodSeconds: 60
-  InitialDelaySeconds: 60
+  periodSeconds: 30
+  InitialDelaySeconds: 30
 
 livenessProbe:
   periodSeconds: 60
