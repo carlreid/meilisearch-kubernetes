@@ -1,7 +1,8 @@
 name: Generate Helm template / manifest
 on:
   push:
-    main
+    branches:
+      - main
 
 jobs:
   update_manifest:
