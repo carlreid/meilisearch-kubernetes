@@ -15,7 +15,7 @@ jobs:
         id: generate_helm_template
         run: |
           helm template meilisearch charts/meilisearch > manifests/meilisearch.yaml
-          echo "::set-output name=has_changes::$(if git diff --quiet && git diff --quiet --cached; then echo "true"; else echo "false"; fi)"
+          echo "::set-output name=has_changes::$(if git diff --quiet && git diff --quiet --cached; then echo "false"; else echo "true"; fi)"
 
       - name: Commit changes
         if: steps.generate_helm_template.outputs.has_changes == 'true'
