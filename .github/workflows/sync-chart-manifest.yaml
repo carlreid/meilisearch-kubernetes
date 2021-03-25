@@ -1,11 +1,34 @@
 name: Sync chart manifest
 on:
   pull_request:
-    types: [ closed ]
+    branches:
+      - main
+  issue_comment:
+    types: [created, edited]
 
 jobs:
-  sync_chart_manifest:
-    if: github.event.pull_request.merged == true
+  check_chart_manifest_in_sync:
+    if: github.event_name == 'pull_request'
+    name: Check chart manifest in sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check helm template in sync
+        id: helm_template
+        run: |
+          helm template meilisearch charts/meilisearch | grep -v 'helm.sh/chart:\|app.kubernetes.io/managed-by:' > manifests/meilisearch.yaml
+          if git diff --quiet && git diff --quiet --cached; then 
+            echo "✅ Manifests are in sync"; 
+          else 
+            echo "❌ Manifest update required. Comment with '@meilisearch sync-manifest' to update automatically";
+            exit 1
+          fi
+
+  sync_chart_manifest_on_comment:
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '@meilisearch sync-manifest')
+    name: Comment to perform sync
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
