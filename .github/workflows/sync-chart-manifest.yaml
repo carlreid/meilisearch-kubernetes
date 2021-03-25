@@ -1,11 +1,11 @@
 name: Sync chart manifest
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [ closed ]
 
 jobs:
   sync_chart_manifest:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
